@@ -102,6 +102,7 @@ const TicketSystem = () => {
   const [selectedTicket, setSelectedTicket] = useState(null);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
+  const [userName, setUserName] = useState(''); // Estado para armazenar o nome do usuário
 
   useEffect(() => {
     const unsubscribeTickets = onSnapshot(collection(db, 'chamados'), (snapshot) => {
@@ -123,6 +124,7 @@ const TicketSystem = () => {
         setLoggedIn(true);
         // Buscar os chamados do usuário logado
         console.log("Usuário logado:", user.email);
+        setUserName(user.displayName || ''); // Define o nome do usuário no estado userName
         onSnapshot(collection(db, 'chamados'), (snapshot) => {
           const userChamados = snapshot.docs
             .map((doc) => ({ id: doc.id, ...doc.data() }))
@@ -132,7 +134,8 @@ const TicketSystem = () => {
         });
       } else {
         setLoggedIn(false);
-        setUserChamados([]); // Limpar a lista de chamados do usuário quando ele fizer logout
+        setUserName(''); // Limpa o nome do usuário quando ele fizer logout
+        setUserChamados([]);
       }
     });
 
@@ -218,6 +221,7 @@ const TicketSystem = () => {
         <div className="logo">
           <img src={logo} alt="Logo" />
         </div>
+        <div className="user-name">{userName}</div> {/* Exibe o nome do usuário */}
         {!isAdmin && (
           <div>
             <button
@@ -281,7 +285,6 @@ const TicketSystem = () => {
             <thead>
               <tr>
                 <th>Título</th>
-                <th>Descrição</th>
                 <th>Status</th>
                 <th>Data</th>
               </tr>
@@ -290,7 +293,6 @@ const TicketSystem = () => {
               {userChamados.map((chamado) => (
                 <tr key={chamado.id}>
                   <td>{chamado.title}</td>
-                  <td>{chamado.description}</td>
                   <td>{chamado.status}</td>
                   <td>{chamado.date}</td>
                 </tr>
