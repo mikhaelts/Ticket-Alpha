@@ -1,10 +1,10 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import {
-    addDoc,
-    collection,
-    getFirestore,
-    onSnapshot
+  addDoc,
+  collection,
+  getFirestore,
+  onSnapshot
 } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 
@@ -97,6 +97,7 @@ const TicketSystem = () => {
   const [name, setName] = useState('');
   const [department, setDepartment] = useState('');
   const [tickets, setTickets] = useState([]);
+  const [userChamados, setUserChamados] = useState([]); // Novo estado para os chamados do usuário
   const [activePage, setActivePage] = useState('Fazer Chamado');
   const [selectedTicket, setSelectedTicket] = useState(null);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
@@ -120,15 +121,25 @@ const TicketSystem = () => {
     const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
       if (user) {
         setLoggedIn(true);
+        // Buscar os chamados do usuário logado
+        console.log("Usuário logado:", user.email);
+        onSnapshot(collection(db, 'chamados'), (snapshot) => {
+          const userChamados = snapshot.docs
+            .map((doc) => ({ id: doc.id, ...doc.data() }))
+            .filter((chamado) => chamado.email === user.email); // Filtrar os chamados do usuário logado
+          console.log("Chamados do usuário:", userChamados);
+          setUserChamados(userChamados);
+        });
       } else {
         setLoggedIn(false);
+        setUserChamados([]); // Limpar a lista de chamados do usuário quando ele fizer logout
       }
     });
 
     return () => {
       unsubscribeAuth();
     };
-  }, []);
+  }, [auth, db]);
 
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
@@ -155,7 +166,8 @@ const TicketSystem = () => {
       name: name,
       department: department,
       status: 'Pendente',
-      date: new Date()
+      date: new Date().toISOString(),
+      email: auth.currentUser.email // Adicionando o e-mail do usuário logado ao chamado
     };
 
     try {
@@ -214,6 +226,12 @@ const TicketSystem = () => {
             >
               Fazer Chamado
             </button>
+            <button
+              className={activePage === 'Meus Chamados' ? 'active' : ''}
+              onClick={() => handlePageChange('Meus Chamados')}
+            >
+              Meus Chamados
+            </button>
           </div>
         )}
         <button onClick={() => signOut(auth)}>Sair</button>
@@ -255,9 +273,48 @@ const TicketSystem = () => {
           </div>
         )}
 
-        {showSuccessMessage && (
+        {activePage === 'Meus Chamados' && (
+          <div>
+          <h2>Meus Chamados</h2>
+          {/* Adicione as classes para a tabela */}
+          <table className="custom-table">
+            <thead>
+              <tr>
+                <th>Título</th>
+                <th>Descrição</th>
+                <th>Status</th>
+                <th>Data</th>
+              </tr>
+            </thead>
+            <tbody>
+              {userChamados.map((chamado) => (
+                <tr key={chamado.id}>
+                  <td>{chamado.title}</td>
+                  <td>{chamado.description}</td>
+                  <td>{chamado.status}</td>
+                  <td>{chamado.date}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+{showSuccessMessage && (
           <div className="success-message">
-            {/* Mensagem de sucesso (código existente) */}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M5 13l4 4L19 7"
+              />
+            </svg>
+            Chamado realizado com sucesso
           </div>
         )}
 
@@ -270,6 +327,5 @@ const TicketSystem = () => {
     </div>
   );
 };
-
 
 export default TicketSystem;
