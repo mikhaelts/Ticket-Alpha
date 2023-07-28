@@ -25,7 +25,7 @@ body {
 .sidebar {
   display: block;
   width: 200px;
-  background-color: rgb(182, 225, 251);
+  background-color: rgb(251, 182, 182);
   padding: 20px;
   color: #fff;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
