@@ -247,7 +247,7 @@ const TicketSystem = () => {
             <form onSubmit={handleTicketSubmit}>
               <label>
                 Título:
-                <input type="text" value={title} onChange={handleTitleChange} style={{ width: '700px', height: '20px', resize: 'none' }}/>
+                <input type="text" value={title} onChange={handleTitleChange} />
               </label>
               <br />
               <label>
@@ -255,13 +255,13 @@ const TicketSystem = () => {
                 <textarea
                   value={description}
                   onChange={handleDescriptionChange}
-                  style={{ width: '700px', height: '150px', resize: 'none' }}
+                 
                 />
               </label>
               <br />
               <label>
                 Nome:
-                <input type="text" value={name} onChange={handleNameChange} style={{ width: '700px', height: '20px', resize: 'none' }} />
+                <input type="text" value={name} onChange={handleNameChange}  />
               </label>
               <br />
               <label>
@@ -270,7 +270,7 @@ const TicketSystem = () => {
                   type="text"
                   value={department}
                   onChange={handleDepartmentChange}
-                  style={{ width: '700px', height: '20px', resize: 'none' }}
+                 
                 />
               </label>
               <br />
