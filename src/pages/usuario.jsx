@@ -7,7 +7,7 @@ import {
   onSnapshot
 } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
-
+import { FaList, FaPen, FaSignOutAlt } from 'react-icons/fa';
 import logo from "./../assets/logo.png";
 import "./../styles/estilo.css";
 
@@ -103,6 +103,29 @@ const TicketSystem = () => {
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
   const [userName, setUserName] = useState(''); // Estado para armazenar o nome do usuário
+  
+ 
+
+ useEffect(() => {
+  const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
+    if (user) {
+      setLoggedIn(true);
+      console.log("Usuário logado:", user.email);
+      setUserName(user.displayName || ''); // Define o nome do usuário no estado userName
+      setName(user.displayName || ''); // Preenche o campo "Nome" no formulário
+      // ... (outro código)
+    } else {
+      setLoggedIn(false);
+      setUserName(''); // Limpa o nome do usuário quando ele fizer logout
+      setUserChamados([]);
+      setName(''); // Limpa o campo "Nome" no formulário quando o usuário fizer logout
+    }
+  });
+
+  return () => {
+    unsubscribeAuth();
+  };
+}, [auth, db]);
 
   useEffect(() => {
     const unsubscribeTickets = onSnapshot(collection(db, 'chamados'), (snapshot) => {
@@ -155,6 +178,7 @@ const TicketSystem = () => {
   const handleNameChange = (e) => {
     setName(e.target.value);
   };
+  
 
   const handleDepartmentChange = (e) => {
     setDepartment(e.target.value);
@@ -212,6 +236,7 @@ const TicketSystem = () => {
   if (!loggedIn) {
     return <Login />;
   }
+  
 
   const isAdmin = false; // Defina o nível de acesso do usuário (true para admin, false para usuário comum)
 
@@ -221,6 +246,9 @@ const TicketSystem = () => {
         <div className="logo">
           <img src={logo} alt="Logo" />
         </div>
+        <div className="container-bem">
+            <p className="bem">Bem vindo {userName}!</p>
+          </div>
         <div className="user-name">{userName}</div> {/* Exibe o nome do usuário */}
         {!isAdmin && (
           <div>
@@ -228,17 +256,17 @@ const TicketSystem = () => {
               className={activePage === 'Fazer Chamado' ? 'active' : ''}
               onClick={() => handlePageChange('Fazer Chamado')}
             >
-              Fazer Chamado
+             <FaPen style={{ marginRight: '8px' }} /> Fazer Chamado
             </button>
             <button
               className={activePage === 'Meus Chamados' ? 'active' : ''}
               onClick={() => handlePageChange('Meus Chamados')}
             >
-              Meus Chamados
+               <FaList style={{ marginRight: '8px' }} />Meus Chamados
             </button>
           </div>
         )}
-        <button onClick={() => signOut(auth)}>Sair</button>
+        <button onClick={() => signOut(auth)}><FaSignOutAlt style={{ marginRight: '8px' }} />Sair</button>
       </div>
       <div className="content">
         {activePage === 'Fazer Chamado' && (
@@ -262,7 +290,7 @@ const TicketSystem = () => {
               <br />
               <label>
                 Nome:
-                <input type="text" value={name} onChange={handleNameChange}  />
+                <input type="text" value={name} onChange={handleNameChange} />
               </label>
               <br />
               <label>
@@ -274,6 +302,7 @@ const TicketSystem = () => {
                  
                 />
               </label>
+              
               <br />
               <button type="submit">Criar Chamado</button>
             </form>
