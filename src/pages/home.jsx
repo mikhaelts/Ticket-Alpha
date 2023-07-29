@@ -10,6 +10,7 @@ import {
   updateDoc
 } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
+import { FaCheck, FaEye, FaList, FaPen, FaSignOutAlt, FaTrash } from 'react-icons/fa';
 import logo from './../assets/logo.png';
 import './../styles/estilo.css';
 
@@ -270,167 +271,174 @@ const TicketSystem = () => {
 
   const isAdmin = true; // Defina o nível de acesso do usuário (true para admin, false para usuário comum)
 
-  return (
-    <div className="ticket-system">
-       
-      <div className="sidebar">
-        
-        <div className="logo">
-          <img src={logo} alt="Logo" />
-        </div>
-        <div className='container-bem'>
-        
-          <p className='bem'>Bem vindo !</p>
-        </div>
-        {isAdmin && (
-          <div>
-            <button 
-              className={activePage === 'Fazer Chamado' ? 'active' : ''}
-              onClick={() => setActivePage('Fazer Chamado')}
-            >
-              
-              Fazer Chamado
-            </button>
-            <button
-              className={activePage === 'Lista de Chamados' ? 'active' : ''}
-              onClick={() => setActivePage('Lista de Chamados')}
-            >
-              Lista de Chamados
-            </button>
+    return (
+      <div className="ticket-system">
+        <div className="sidebar">
+          <div className="logo">
+            <img src={logo} alt="Logo" />
           </div>
-        )}
-        <button onClick={() => signOut(auth)}>Sair</button>
-      </div>
-      <div className="content">
-        {activePage === 'Fazer Chamado' && (
-          <div>
-            <h2>Fazer Chamado</h2>
-            <form onSubmit={handleTicketSubmit}>
-              <label>
-                Título:
-                <input type="text" value={title} onChange={handleTitleChange}  />
-              </label>
-              <br />
-              <label>
-                Descrição:
-                <textarea
-                  value={description}
-                  onChange={handleDescriptionChange}
-                  style={{ height: '150px' }}
-                />
-              </label>
-              <br />
-              <label>
-                Nome:
-                <input type="text" value={name} onChange={handleNameChange} />
-              </label>
-              <br />
-              <label>
-                Setor:
-                <input
-                  type="text"
-                  value={department}
-                  onChange={handleDepartmentChange}
-                />
-              </label>
-              <br />
-              <button type="submit">Criar Chamado</button>
-            </form>
+          <div className="container-bem">
+            <p className="bem">Bem vindo !</p>
           </div>
-        )}
-
-        {activePage === 'Lista de Chamados' && (
-          <div>
-            <h2>Lista de Chamados</h2>
-            {tickets.length === 0 ? (
-              <p>Nenhum chamado criado ainda.</p>
-            ) : (
-              <table className="tickets-table">
-                <thead>
-                  <tr>
-                    <th>Título</th>
-                    <th>Nome do Usuário</th>
-                    <th>Setor</th>
-                    <th>Status</th>
-                    <th>Data</th>
-                    <th>Ação</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {tickets.map((ticket) => (
-                    <tr key={ticket.id}>
-                      <td>{ticket.title}</td>
-                      <td>{ticket.name}</td>
-                      <td>{ticket.department}</td>
-                      <td>
-                        {ticket.status === 'Pendente' &&
-                          (new Date().getTime() - new Date(ticket.date).getTime()) > 24 * 60 * 60 * 1000 ? (
-                            <span>Atrasado</span>
-                          ) : (
-                            ticket.status
-                          )}
-                      </td>
-                      <td>{formatDate(ticket.date)}</td>
-                      <td>
-                        <button onClick={() => handleViewTicket(ticket)}>
-                          Ver Chamado
-                        </button>
-                        {ticket.status === 'Concluído' && (
-                          <button onClick={handleDeleteTicket}>
-                            Excluir
-                          </button>
-                        )}
-                      </td>
+          {isAdmin && (
+            <div>
+              <button
+                className={activePage === 'Fazer Chamado' ? 'active' : ''}
+                onClick={() => setActivePage('Fazer Chamado')}
+              >
+              <FaPen style={{ marginRight: '8px' }} />Fazer Chamado 
+              </button>
+              <button
+                className={activePage === 'Lista de Chamados' ? 'active' : ''}
+                onClick={() => setActivePage('Lista de Chamados')}
+              >
+                  <FaList style={{ marginRight: '8px' }} />  Lista de Chamados {/* Ícone personalizado */}
+              </button>
+            </div>
+          )}
+          <button onClick={() => signOut(auth)}>
+          <FaSignOutAlt style={{ marginRight: '8px' }} /> Sair {/* Ícone personalizado */}
+          </button>
+        </div>
+        <div className="content">
+          {activePage === 'Fazer Chamado' && (
+            <div>
+              <h2>
+                 Fazer Chamado 
+              </h2>
+              <form onSubmit={handleTicketSubmit}>
+                <label>
+                  Título:
+                  <input type="text" value={title} onChange={handleTitleChange} />
+                </label>
+                <br />
+                <label>
+                  Descrição:
+                  <textarea
+                    value={description}
+                    onChange={handleDescriptionChange}
+                    style={{ height: '150px' }}
+                  />
+                </label>
+                <br />
+                <label>
+                  Nome:
+                  <input type="text" value={name} onChange={handleNameChange} />
+                </label>
+                <br />
+                <label>
+                  Setor:
+                  <input
+                    type="text"
+                    value={department}
+                    onChange={handleDepartmentChange}
+                  />
+                </label>
+                <br />
+                <button type="submit">Criar Chamado</button>
+              </form>
+            </div>
+          )}
+  
+          {activePage === 'Lista de Chamados' && (
+            <div>
+              <h2>Lista de Chamados</h2>
+              {tickets.length === 0 ? (
+                <p>Nenhum chamado criado ainda.</p>
+              ) : (
+                <table className="tickets-table">
+                  <thead>
+                    <tr>
+                      <th>Título</th>
+                      <th>Nome do Usuário</th>
+                      <th>Setor</th>
+                      <th>Status</th>
+                      <th>Data</th>
+                      <th>Ação</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            )}
-          </div>
-        )}
-
-        {showSuccessMessage && (
-          <div className="success-message">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M5 13l4 4L19 7"
-              />
-            </svg>
-            Chamado realizado com sucesso
-          </div>
-        )}
-
-        {showTitle && selectedTicket && (
-          <div className="view-ticket">
-            <h2>{selectedTicket.title}</h2>
-            <p>Descrição: {selectedTicket.description}</p>
-            <p>Nome: {selectedTicket.name}</p>
-            <p>Setor: {selectedTicket.department}</p>
-            {selectedTicket.status === 'Pendente' && (
-              <div className="buttons">
-                <button onClick={handleCompleteTicket}>Concluir</button>
-                <button onClick={handleCloseTicket}>Fechar</button>
-              </div>
-            )}
-            {selectedTicket.status === 'Concluído' && (
-              <div className="buttons">
-                <button onClick={handleDeleteTicket}>Excluir</button>
-                <button onClick={handleCloseTicket}>Fechar</button>
-              </div>
-            )}
-          </div>
-        )}
+                  </thead>
+                  <tbody>
+                    {tickets.map((ticket) => (
+                      <tr key={ticket.id}>
+                        <td>{ticket.title}</td>
+                        <td>{ticket.name}</td>
+                        <td>{ticket.department}</td>
+                        <td>
+                          {ticket.status === 'Pendente' &&
+                            (new Date().getTime() - new Date(ticket.date).getTime()) > 24 * 60 * 60 * 1000 ? (
+                              <span>Atrasado</span>
+                            ) : (
+                              ticket.status
+                            )}
+                        </td>
+                        <td>{formatDate(ticket.date)}</td>
+                        <td>
+                          <button onClick={() => handleViewTicket(ticket)}>
+                            <FaEye  style={{ marginRight: '4px' }} /> Ver Chamado {/* Ícone personalizado */}
+                          </button>
+                          {ticket.status === 'Concluído' && (
+                            <button onClick={handleDeleteTicket}>
+                              <FaTrash style={{ marginRight: '4px' }} /> Excluir {/* Ícone personalizado */}
+                            </button>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </div>
+          )}
+            
+          {showSuccessMessage && (
+            <div className="success-message">
+              <FaCheck style={{ marginRight: '4px' }} /> {/* Ícone personalizado */}
+              Chamado realizado com sucesso
+            </div>
+          )}
+  
+          {showTitle && selectedTicket && (
+            <div className="view-ticket">
+              <h2>{selectedTicket.title}</h2>
+              <p>Descrição: {selectedTicket.description}</p>
+              <p>Nome: {selectedTicket.name}</p>
+              <p>Setor: {selectedTicket.department}</p>
+              {selectedTicket.status === 'Pendente' && (
+                <div className="buttons">
+                  <button onClick={handleCompleteTicket}>
+                    <FaCheck style={{ marginRight: '4px' }}/> Concluir {/* Ícone personalizado */}
+                  </button>
+                  <button onClick={handleCloseTicket}>
+                  <FaSignOutAlt /> Fechar {/* Ícone personalizado */}
+                  </button>
+                </div>
+              )}
+              {selectedTicket.status === 'Concluído' && (
+                <div className="buttons">
+                  <button onClick={handleDeleteTicket}>
+                    <FaTrash style={{ marginRight: '4px' }} /> Excluir {/* Ícone personalizado */}
+                  </button>
+                  <button onClick={handleCloseTicket}>
+                  <FaSignOutAlt style={{ marginRight: '4px' }} /> Fechar {/* Ícone personalizado */}
+                  </button>
+                </div>
+              )}
+              {selectedTicket.status === 'Atrasado' && (
+                <div className="buttons">
+                  <button onClick={handleDeleteTicket}>
+                    <FaTrash style={{ marginRight: '4px' }} /> Excluir {/* Ícone personalizado */}
+                  </button>
+                  <button onClick={handleCloseTicket}>
+                  <FaSignOutAlt style={{ marginRight: '4px' }} /> Fechar {/* Ícone personalizado */}
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+          
+        </div>
       </div>
-    </div>
-  );
-};
+    );
+  };
 
 export default TicketSystem;
