@@ -255,6 +255,7 @@ const TicketSystem = () => {
                 <textarea
                   value={description}
                   onChange={handleDescriptionChange}
+                  style={{ height: '150px' }}
                  
                 />
               </label>

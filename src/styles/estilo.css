@@ -25,10 +25,10 @@ body {
 .sidebar {
   display: block;
   width: 200px;
-  background-color: rgb(251, 182, 182);
+  background-color: rgb(182, 233, 251);
   padding: 20px;
   color: #fff;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   font-weight:lighter;
 }
 
