@@ -364,12 +364,17 @@ const TicketSystem = () => {
                         <td>{ticket.name}</td>
                         <td>{ticket.department}</td>
                         <td>
-                          {ticket.status === 'Pendente' &&
-                            (new Date().getTime() - new Date(ticket.date).getTime()) > 24 * 60 * 60 * 1000 ? (
-                              <span>Atrasado</span>
-                            ) : (
-                              ticket.status
-                            )}
+                        
+                         
+                        
+
+                 
+                        {ticket.status === 'Pendente' &&
+    (new Date().getTime() - new Date(ticket.date).getTime()) > 24 * 60 * 60 * 1000 ? (
+      <span className='vermelho'>Atrasado</span>
+    ) : (
+      <span className={ticket.status.toLowerCase() === 'concluído' ? 'concluido' : ticket.status.toLowerCase()}>{ticket.status}</span>
+    )}
                         </td>
                         <td>{formatDate(ticket.date)}</td>
                         <td>
@@ -377,9 +382,12 @@ const TicketSystem = () => {
                             <FaEye  style={{ marginRight: '4px' }} /> Ver Chamado {/* Ícone personalizado */}
                           </button>
                           {ticket.status === 'Concluído' && (
+                            
                             <button onClick={handleDeleteTicket}>
                               <FaTrash style={{ marginRight: '4px' }} /> Excluir {/* Ícone personalizado */}
+                              
                             </button>
+                            
                           )}
                         </td>
                       </tr>
@@ -404,6 +412,8 @@ const TicketSystem = () => {
               <p>Nome: {selectedTicket.name}</p>
               <p>Setor: {selectedTicket.department}</p>
               {selectedTicket.status === 'Pendente' && (
+               
+               
                 <div className="buttons">
                   <button onClick={handleCompleteTicket}>
                     <FaCheck style={{ marginRight: '4px' }}/> Concluir {/* Ícone personalizado */}
@@ -412,10 +422,13 @@ const TicketSystem = () => {
                   <FaSignOutAlt /> Fechar {/* Ícone personalizado */}
                   </button>
                 </div>
+                
               )}
-              {selectedTicket.status === 'Concluído' && (
+             <span>
+              </span> {selectedTicket.status === 'Concluído' && (
+                
                 <div className="buttons">
-                  <button onClick={handleDeleteTicket}>
+                  <button onClick={handleDeleteTicket} >
                     <FaTrash style={{ marginRight: '4px' }} /> Excluir {/* Ícone personalizado */}
                   </button>
                   <button onClick={handleCloseTicket}>
