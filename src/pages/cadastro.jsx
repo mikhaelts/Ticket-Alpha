@@ -2,6 +2,7 @@ import { initializeApp } from 'firebase/app';
 import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
 import { addDoc, collection, getFirestore } from 'firebase/firestore';
 import React, { useState } from 'react';
+import './../styles/cadastro.css';
 
 const firebaseConfig = {
   // Suas configurações do Firebase
@@ -65,37 +66,48 @@ const SignUp = () => {
 
   return (
     <div>
-      <h2>Cadastro de Usuário</h2>
-      <form onSubmit={handleSignUp}>
+      <h2 className='nomecadastro'>Cadastrar Usuário</h2>
+      <form  className="meu-form"onSubmit={handleSignUp}>
         <div>
-          <label htmlFor="email">Email:</label>
+          
+          <label htmlFor="email"><span style={{ color: 'red',margin: '4px' }}>*</span>Email:</label>
           <input
             type="email"
             id="email"
             value={email}
             onChange={handleEmailChange}
+            placeholder='Cadastre um Email '
+            className='email'
+            required
           />
         </div>
         <div>
-          <label htmlFor="password">Senha:</label>
+          <label htmlFor="password"><span style={{ color: 'red',margin: '4px' }}>*</span>Senha:</label>
           <input
             type="password"
             id="password"
             value={password}
             onChange={handlePasswordChange}
+            className='senha'
+            placeholder='Crie uma Senha '
+            required
+            
           />
         </div>
-        <div>
-          <label htmlFor="isAdmin">É administrador?</label>
+        <label htmlFor="isAdmin">É administrador?</label>
+        <div className='container-chek'>
           <input
             type="checkbox"
             id="isAdmin"
             checked={isAdmin}
             onChange={handleAdminChange}
+            className='checkbox'
           />
         </div>
-        <button type="submit">Cadastrar</button>
+        <button className='botao-cadastrar' type="submit">Cadastrar</button>
       </form>
+      <p className='info'>Informação !!</p>
+      <span className='aviso'>Ao marcar o Campo De Checkbox será criado uma conta para administrador <br></br>caso ao contrario sera criado Uma conta de Usuario</span>
     </div>
   );
 };

@@ -1,0 +1,63 @@
+.nomecadastro{
+    color: #09154f;
+}
+.senha{
+    border-radius: 10px;
+    height: 20px;
+   
+
+}
+.email{
+height: 20px;
+border-radius: 10px;
+}
+.botao-cadastrar{
+    width: 300px;
+    margin-bottom: 90px;
+}
+.botao-cadastrar:hover{
+    background-color: #fff;
+    color: #09154f;
+    border: #09154f solid 1.5px;
+}
+.container-chek{
+width: 40px;
+}
+.checkbox{
+    display: flex;
+    justify-content: flex-start;
+    margin-right: 5px;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 10px;
+    height: 28px;
+    border: 2px solid #000000;
+    border-radius: 4px;
+    outline: none;
+    cursor: pointer;
+}
+
+  .checkbox[type="checkbox"]:checked {
+    background-color: #09154f;
+    border: 2px solid #09154f;
+  }
+  
+  .checkbox[type="checkbox"]:checked::before {
+    content: '\2713';
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    font-size: 16px;
+    color: #fff;
+  }
+  
+  .info{
+    color: red;
+    margin-bottom: 10px;
+  }
+  .aviso{
+    color: red;
+    text-align: justify;
+  }

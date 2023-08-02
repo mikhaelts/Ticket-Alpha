@@ -10,9 +10,13 @@ import {
   updateDoc
 } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
-import { FaCheck, FaEye, FaList, FaPen, FaSignOutAlt, FaTrash } from 'react-icons/fa';
+import { FaCheck, FaEye, FaList, FaPen, FaSignOutAlt, FaTrash, FaUserPlus } from 'react-icons/fa';
+import SignUp from "../pages/cadastro";
 import logo from './../assets/logo.png';
 import './../styles/estilo.css';
+
+
+
 
 const firebaseConfig = {
   // Coloque suas próprias chaves de API e configurações do projeto aqui
@@ -137,6 +141,8 @@ const TicketSystem = () => {
     };
   }, [db]);
 
+  
+
   useEffect(() => {
     const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -259,6 +265,7 @@ const TicketSystem = () => {
       console.error('Erro ao excluir o chamado:', error);
     }
   };
+  
 
   const handleCloseTicket = () => {
     setSelectedTicket(null);
@@ -294,8 +301,17 @@ const TicketSystem = () => {
               >
                   <FaList style={{ marginRight: '8px' }} />  Lista de Chamados {/* Ícone personalizado */}
               </button>
+              <button
+  className={activePage === 'Cadastrar Usuário' ? 'active' : ''}
+  onClick={() => setActivePage('Cadastrar Usuário')}
+>
+  <FaUserPlus style={{ marginRight: '8px' }} /> Cadastrar Usuário {/* Ícone personalizado */}
+</button>
+
             </div>
+            
           )}
+          
           <button onClick={() => signOut(auth)}>
           <FaSignOutAlt style={{ marginRight: '8px' }} /> Sair {/* Ícone personalizado */}
           </button>
@@ -309,7 +325,8 @@ const TicketSystem = () => {
               <form onSubmit={handleTicketSubmit}>
                 <label>
                   Título:
-                  <input type="text" value={title} onChange={handleTitleChange} />
+                  <input type="text" value={title} onChange={handleTitleChange} placeholder='Titulo Breve'/>
+                  
                 </label>
                 <br />
                 <label>
@@ -318,28 +335,45 @@ const TicketSystem = () => {
                     value={description}
                     onChange={handleDescriptionChange}
                     style={{ height: '150px' }}
+                    placeholder='Descrição Completa'
                   />
                 </label>
                 <br />
                 <label>
+                <span style={{ color: 'red',margin: '4px'  }}>*</span>
                   Nome:
-                  <input type="text" value={name} onChange={handleNameChange} />
+                  <input type="text" value={name} onChange={handleNameChange} placeholder='Primeiro Nome' required/>
                 </label>
                 <br />
                 <label>
+                <span style={{ color: 'red',margin: '4px'  }}>*</span>
                   Setor:
                   <input
                     type="text"
                     value={department}
                     onChange={handleDepartmentChange}
+                    required
+                    placeholder='Setor'
                   />
+                  
                 </label>
                 <br />
                 <button type="submit">Criar Chamado</button>
               </form>
             </div>
           )}
-  
+
+
+
+          
+           {activePage === 'Cadastrar Usuário' && (
+            <SignUp />
+           )}
+
+
+
+
+
           {activePage === 'Lista de Chamados' && (
             <div>
               <h2>Lista de Chamados</h2>
