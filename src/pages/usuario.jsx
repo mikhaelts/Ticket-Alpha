@@ -247,7 +247,7 @@ const TicketSystem = () => {
           <img src={logo} alt="Logo" />
         </div>
         <div className="container-bem">
-            <p className="bem">Bem vindo {userName}!</p>
+            <p className="bem">Bem vindo ! {userName}!</p>
           </div>
         <div className="user-name">{userName}</div> {/* Exibe o nome do usuário */}
         {!isAdmin && (
